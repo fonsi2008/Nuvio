@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuvio - Smart Pillows für besseren Schlaf</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#0a0a0a',
+                        foreground: '#fafafa',
+                        card: '#1a1a1a',
+                        'card-foreground': '#fafafa',
+                        primary: '#0ea5e9',
+                        'primary-foreground': '#f0f9ff',
+                        secondary: '#262626',
+                        'secondary-foreground': '#fafafa',
+                        muted: '#262626',
+                        'muted-foreground': '#a1a1aa',
+                        accent: '#262626',
+                        'accent-foreground': '#fafafa',
+                        destructive: '#dc2626',
+                        'destructive-foreground': '#fafafa',
+                        border: '#262626',
+                        input: '#262626',
+                        ring: '#0ea5e9',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #fafafa;
+        }
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        .animate-bounce {
+            animation: bounce 1s infinite;
+        }
+        .animate-ping {
+            animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(-25%);
+                animation-timing-function: cubic-bezier(0.8,0,1,1);
+            }
+            50% {
+                transform: none;
+                animation-timing-function: cubic-bezier(0,0,0.2,1);
+            }
+        }
+        @keyframes ping {
+            75%, 100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+        .hover-icon:hover .icon {
+            transform: scale(1.1);
+        }
+        .btn-primary {
+            background-color: #0ea5e9;
+            color: #f0f9ff;
+            padding: 12px 32px;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            background-color: #0284c7;
+        }
+        .btn-outline {
+            background-color: transparent;
+            color: #fafafa;
+            padding: 12px 32px;
+            border: 1px solid #262626;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .btn-outline:hover {
+            background-color: #1a1a1a;
+        }
+        .card {
+            background-color: #1a1a1a;
+            border: 1px solid #262626;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .card:hover {
+            border-color: rgba(14, 165, 233, 0.5);
+        }
+        .badge {
+            background-color: rgba(14, 165, 233, 0.2);
+            color: #0ea5e9;
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .popular-badge {
+            background-color: #0ea5e9;
+            color: #f0f9ff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .ring-primary {
+            box-shadow: 0 0 0 2px #0ea5e9;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+     Header 
+    <header class="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/nuvio-logo-C1Mp94DiRVa7sglYS02NpZ0UAbzZF9.png" alt="Nuvio Logo - Smart Pillows for Better Sleep" class="h-14 w-auto">
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#features" class="text-gray-400 hover:text-blue-400 transition-colors">Features</a>
+                <a href="#products" class="text-gray-400 hover:text-blue-400 transition-colors">Produkte</a>
+                <a href="#about" class="text-gray-400 hover:text-blue-400 transition-colors">Über uns</a>
+                <a href="#contact" class="text-gray-400 hover:text-blue-400 transition-colors">Kontakt</a>
+            </nav>
+            <button class="btn-primary">Jetzt kaufen</button>
+        </div>
+    </header>
+
+     Hero Section 
+    <section class="relative py-20 px-4 overflow-hidden">
+        <div class="container mx-auto text-center fade-in" id="hero">
+            <div class="badge mb-6">Revolutionäre Schlaftechnologie</div>
+            <h1 class="text-5xl md:text-7xl font-bold mb-6">
+                Intelligente Kissen für
+                <span class="text-blue-400 block">besseren Schlaf</span>
+            </h1>
+            <p class="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+                Entdecken Sie die Zukunft des Schlafens mit Nuvios Smart Pillows. Personalisierte Schlafoptimierung durch modernste Technologie.
+            </p>
+            <div class="mb-8">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/modern-smart-pillow-on-elegant-bed-in-dark-bedroom-YCCej6lIIUGusMsHhxLG0qk2thJRVH.png" alt="Nuvio Smart Pillow" class="mx-auto rounded-lg shadow-2xl max-w-full h-auto">
+            </div>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="btn-primary text-lg">Kollektion entdecken</button>
+                <button class="btn-outline text-lg">Mehr erfahren</button>
+            </div>
+        </div>
+
+         Animated background elements 
+        <div class="absolute top-20 left-10 w-20 h-20 bg-blue-500/10 rounded-full animate-pulse"></div>
+        <div class="absolute bottom-20 right-10 w-32 h-32 bg-gray-500/5 rounded-full animate-bounce"></div>
+        <div class="absolute top-1/2 left-1/4 w-16 h-16 bg-blue-500/5 rounded-full animate-ping"></div>
+    </section>
+
+     Features Section 
+    <section id="features" class="py-20 px-4 bg-gray-900/30">
+        <div class="container mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Innovative Features</h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    Jedes Nuvio Kissen ist mit modernster Technologie ausgestattet, um Ihren Schlaf zu revolutionieren.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 mb-16">
+                <div class="space-y-6">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/person-sleeping-peacefully-with-smart-pillow-showi-xy55rIPCzKy8qV4tlC1HziCweapFWp.png" alt="Sanftes Aufwecken Feature" class="rounded-lg shadow-lg w-full h-auto">
+                    <div class="text-center">
+                        <h3 class="text-xl font-semibold mb-2">Sanftes Aufwecken</h3>
+                        <p class="text-gray-400">Natürliches Erwachen durch Licht und Vibration</p>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/smartphone-app-showing-sleep-tracking-data-and-ana-t8Rl40cHZDfMywY4Ff9p7iir2YcgT5.png" alt="Schlaftracking App" class="rounded-lg shadow-lg w-full h-auto">
+                    <div class="text-center">
+                        <h3 class="text-xl font-semibold mb-2">Intelligentes Tracking</h3>
+                        <p class="text-gray-400">Detaillierte Schlafanalyse in der App</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card p-6 hover-scale hover-icon transition-all duration-300">
+                    <div class="mb-4 text-blue-400 icon transition-transform duration-300">
+                        <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Sanftes Aufwecken</h3>
+                    <p class="text-gray-400">Vibration und Licht für einen natürlichen Start in den Tag</p>
+                </div>
+
+                <div class="card p-6 hover-scale hover-icon transition-all duration-300">
+                    <div class="mb-4 text-blue-400 icon transition-transform duration-300">
+                        <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                            <line x1="8" y1="21" x2="16" y2="21"></line>
+                            <line x1="12" y1="17" x2="12" y2="21"></line>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Schlaftracking</h3>
+                    <p class="text-gray-400">App zeigt detaillierte Schlafqualität und Verbesserungsvorschläge</p>
+                </div>
+
+                <div class="card p-6 hover-scale hover-icon transition-all duration-300">
+                    <div class="mb-4 text-blue-400 icon transition-transform duration-300">
+                        <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Temperaturregelung</h3>
+                    <p class="text-gray-400">Wärme- und Kühlfunktion für optimalen Schlafkomfort</p>
+                </div>
+
+                <div class="card p-6 hover-scale hover-icon transition-all duration-300">
+                    <div class="mb-4 text-blue-400 icon transition-transform duration-300">
+                        <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <polygon points="11 5,6 9,2 9,2 15,6 15,11 19,11 5"></polygon>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Entspannende Klänge</h3>
+                    <p class="text-gray-400">Musik oder Naturgeräusche für besseres Einschlafen</p>
+                </div>
+
+                <div class="card p-6 hover-scale hover-icon transition-all duration-300">
+                    <div class="mb-4 text-blue-400 icon transition-transform duration-300">
+                        <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <polygon points="13 2,3 14,12 14,11 22,21 10,12 10,13 2"></polygon>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Massagefunktion</h3>
+                    <p class="text-gray-400">Sanfte Vibrationsmassage zur Entspannung</p>
+                </div>
+
+                <div class="card p-6 hover-scale hover-icon transition-all duration-300">
+                    <div class="mb-4 text-blue-400 icon transition-transform duration-300">
+                        <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Gesundheitsmonitoring</h3>
+                    <p class="text-gray-400">Überwachung von Herzfrequenz und Atmung</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     Products Section 
+    <section id="products" class="py-20 px-4">
+        <div class="container mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Unsere Kissen-Kollektion</h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    Wählen Sie das perfekte Smart Pillow für Ihre Bedürfnisse.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                 Nuvio Essential 
+                <div class="card p-6 hover-scale transition-all duration-300 relative">
+                    <div class="pb-0">
+                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/abstract-geometric-shapes-sUE5R8SURiS0JAVLKZSgt58oSNZSJI.png" alt="Nuvio Essential" class="w-full h-48 object-cover rounded-lg mb-4">
+                    </div>
+                    <div class="text-center mb-4">
+                        <h3 class="text-2xl font-semibold">Nuvio Essential</h3>
+                        <div class="text-3xl font-bold text-blue-400">€299</div>
+                    </div>
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center space-x-2">
+                            <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-sm">Schlaftracking</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-sm">Sanftes Aufwecken</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-sm">App-Steuerung</span>
+                        </li>
+                    </ul>
+                    <button class="btn-primary w-full">Jetzt bestellen</button>
+                </div>
+
+                 Nuvio Pro 
+                <div class="card p-6 hover-scale transition-all duration-300 relative ring-primary">
+                    <div class="popular-badge">Beliebteste Wahl</div>
+                    <div class="pb-0">
+                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/abstract-geometric-shapes-sUE5R8SURiS0JAVLKZSgt58oSNZSJI.png" alt="Nuvio Pro" class="w-full h-48 object-cover rounded-lg mb-4">
+                    </div>
+                    <div class="text-center mb-4">
+                        <h3 class="text-2xl font-semibold">Nuvio Pro</h3>
+                        <div class="text-3xl font-bold text-blue-400">€499</div>
+                    </div>
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center space-x-2">
+                            <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-sm">Alle Essential Features</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-sm">Temperaturregelung</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-sm">Entspannungsklänge</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-sm">Massagefunktion</span>
+                        </li>
+                    </ul>
+                    <button class="btn-primary w-full">Jetzt bestellen</button>
+                </div>
+
+                 Nuvio Elite 
+                <div class="card p-6 hover-scale transition-all duration-300 relative">
+                    <div class="pb-0">
+                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/abstract-geometric-shapes-sUE5R8SURiS0JAVLKZSgt58oSNZSJI.png" alt="Nuvio Elite" class="w-full h-48 object-cover rounded-lg mb-4">
+                    </div>
+                    <div class="text-center mb-4">
+                        <h3 class="text-2xl font-semibold">Nuvio Elite</h3>
+                        <div class="text-3xl font-bold text-blue-400">€699</div>
+                    </div>
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center space-x-2">
+                            <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-sm">Alle Pro Features</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-sm">Gesundheitsmonitoring</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-sm">KI-Schlafoptimierung</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-sm">Premium Support</span>
+                        </li>
+                    </ul>
+                    <button class="btn-primary w-full">Jetzt bestellen</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     Lifestyle Section 
+    <section class="py-20 px-4 bg-gray-900/30">
+        <div class="container mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Perfekt für jeden Schlaftyp</h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    Erleben Sie, wie Nuvio Smart Pillows Ihr Schlafzimmer in eine Oase der Entspannung verwandeln.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/modern-dark-bedroom-with-smart-pillow-glowing-soft-i0j5z5q4yHfkTw6mW7gV9wOLNrWyVb.png" alt="Modernes Schlafzimmer mit Nuvio" class="rounded-lg shadow-lg w-full h-auto">
+                    <h3 class="text-xl font-semibold">Für Seitenschläfer</h3>
+                    <p class="text-gray-400">
+                        Optimale Unterstützung und Temperaturregelung für seitliche Schlafposition.
+                    </p>
+                </div>
+                <div class="space-y-4">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/couple-sleeping-peacefully-with-two-smart-pillows--x9CvujwYWakQWgIYCE6wuJVJ30YXQQ.png" alt="Paar mit Nuvio Kissen" class="rounded-lg shadow-lg w-full h-auto">
+                    <h3 class="text-xl font-semibold">Für Paare</h3>
+                    <p class="text-gray-400">
+                        Individuelle Einstellungen für beide Partner ohne gegenseitige Störung.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     CTA Section 
+    <section class="py-20 px-4 bg-blue-500/10">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-4">Bereit für besseren Schlaf?</h2>
+            <p class="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+                Schließen Sie sich tausenden zufriedenen Kunden an und erleben Sie die Zukunft des Schlafens mit Nuvio.
+            </p>
+            <button class="btn-primary text-lg">Kollektion ansehen</button>
+        </div>
+    </section>
+
+     Footer 
+    <footer class="bg-gray-900 border-t border-gray-800 py-12 px-4">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/nuvio-logo-C1Mp94DiRVa7sglYS02NpZ0UAbzZF9.png" alt="Nuvio Logo - Smart Pillows for Better Sleep" class="h-14 w-auto mb-4">
+                    <p class="text-gray-400 text-sm">Revolutionäre Smart Pillows für optimalen Schlafkomfort.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-4">Produkte</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">Nuvio Essential</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">Nuvio Pro</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">Nuvio Elite</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-4">Support</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">Hilfe & FAQ</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">Kontakt</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">Garantie</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-4">Unternehmen</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">Über uns</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">Karriere</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">Presse</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+                <p>&copy; 2024 Nuvio. Alle Rechte vorbehalten.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Fade in animation on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const hero = document.getElementById('hero');
+            setTimeout(() => {
+                hero.classList.add('visible');
+            }, 100);
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
