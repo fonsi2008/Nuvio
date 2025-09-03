@@ -140,10 +140,119 @@
         .ring-primary {
             box-shadow: 0 0 0 2px #0ea5e9;
         }
+        /* Added modal and form styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #1a1a1a;
+            border: 1px solid #262626;
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .close {
+            position: absolute;
+            right: 16px;
+            top: 16px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #a1a1aa;
+            transition: color 0.2s;
+        }
+        .close:hover {
+            color: #fafafa;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #fafafa;
+        }
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: #262626;
+            border: 1px solid #404040;
+            border-radius: 6px;
+            color: #fafafa;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #0ea5e9;
+            box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
+        }
+        .product-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background-color: #262626;
+            border: 2px solid #404040;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .product-option:hover {
+            border-color: #0ea5e9;
+        }
+        .product-option.selected {
+            border-color: #0ea5e9;
+            background-color: rgba(14, 165, 233, 0.1);
+        }
+        .product-info h4 {
+            margin: 0 0 4px 0;
+            font-weight: 600;
+        }
+        .product-info p {
+            margin: 0;
+            font-size: 14px;
+            color: #a1a1aa;
+        }
+        .product-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #0ea5e9;
+        }
     </style>
 </head>
 <body class="min-h-screen">
-     Header 
+    <!-- Header -->
     <header class="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-4 flex items-center justify-between">
             <div class="flex items-center space-x-2">
@@ -155,11 +264,12 @@
                 <a href="#about" class="text-gray-400 hover:text-blue-400 transition-colors">Über uns</a>
                 <a href="#contact" class="text-gray-400 hover:text-blue-400 transition-colors">Kontakt</a>
             </nav>
-            <button class="btn-primary">Jetzt kaufen</button>
+            <!-- Added onclick to open purchase modal -->
+            <button class="btn-primary" onclick="openPurchaseModal()">Jetzt kaufen</button>
         </div>
     </header>
 
-     Hero Section 
+    <!-- Hero Section -->
     <section class="relative py-20 px-4 overflow-hidden">
         <div class="container mx-auto text-center fade-in" id="hero">
             <div class="badge mb-6">Revolutionäre Schlaftechnologie</div>
@@ -174,18 +284,19 @@
                 <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/modern-smart-pillow-on-elegant-bed-in-dark-bedroom-YCCej6lIIUGusMsHhxLG0qk2thJRVH.png" alt="Nuvio Smart Pillow" class="mx-auto rounded-lg shadow-2xl max-w-full h-auto">
             </div>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button class="btn-primary text-lg">Kollektion entdecken</button>
+                <!-- Added onclick to open purchase modal -->
+                <button class="btn-primary text-lg" onclick="openPurchaseModal()">Kollektion entdecken</button>
                 <button class="btn-outline text-lg">Mehr erfahren</button>
             </div>
         </div>
 
-         Animated background elements 
+        <!-- Animated background elements -->
         <div class="absolute top-20 left-10 w-20 h-20 bg-blue-500/10 rounded-full animate-pulse"></div>
         <div class="absolute bottom-20 right-10 w-32 h-32 bg-gray-500/5 rounded-full animate-bounce"></div>
         <div class="absolute top-1/2 left-1/4 w-16 h-16 bg-blue-500/5 rounded-full animate-ping"></div>
     </section>
 
-     Features Section 
+    <!-- Features Section -->
     <section id="features" class="py-20 px-4 bg-gray-900/30">
         <div class="container mx-auto">
             <div class="text-center mb-16">
@@ -287,7 +398,7 @@
         </div>
     </section>
 
-     Products Section 
+    <!-- Products Section -->
     <section id="products" class="py-20 px-4">
         <div class="container mx-auto">
             <div class="text-center mb-16">
@@ -298,27 +409,21 @@
             </div>
 
             <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                 Nuvio Essential 
+                <!-- Nuvio Essential -->
                 <div class="card p-6 hover-scale transition-all duration-300 relative">
                     <div class="pb-0">
                         <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/abstract-geometric-shapes-sUE5R8SURiS0JAVLKZSgt58oSNZSJI.png" alt="Nuvio Essential" class="w-full h-48 object-cover rounded-lg mb-4">
                     </div>
                     <div class="text-center mb-4">
                         <h3 class="text-2xl font-semibold">Nuvio Essential</h3>
-                        <div class="text-3xl font-bold text-blue-400">€299</div>
+                        <div class="text-3xl font-bold text-blue-400">€50</div>
                     </div>
                     <ul class="space-y-3 mb-6">
                         <li class="flex items-center space-x-2">
                             <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
-                            <span class="text-sm">Schlaftracking</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            <span class="text-sm">Sanftes Aufwecken</span>
+                            <span class="text-sm">Wärme Kühl funktion</span>
                         </li>
                         <li class="flex items-center space-x-2">
                             <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -327,10 +432,11 @@
                             <span class="text-sm">App-Steuerung</span>
                         </li>
                     </ul>
-                    <button class="btn-primary w-full">Jetzt bestellen</button>
+                    <!-- Added onclick with product selection -->
+                    <button class="btn-primary w-full" onclick="openPurchaseModal('essential')">Jetzt bestellen</button>
                 </div>
 
-                 Nuvio Pro 
+                <!-- Nuvio Pro -->
                 <div class="card p-6 hover-scale transition-all duration-300 relative ring-primary">
                     <div class="popular-badge">Beliebteste Wahl</div>
                     <div class="pb-0">
@@ -366,10 +472,11 @@
                             <span class="text-sm">Massagefunktion</span>
                         </li>
                     </ul>
-                    <button class="btn-primary w-full">Jetzt bestellen</button>
+                    <!-- Added onclick with product selection -->
+                    <button class="btn-primary w-full" onclick="openPurchaseModal('pro')">Jetzt bestellen</button>
                 </div>
 
-                 Nuvio Elite 
+                <!-- Nuvio Elite -->
                 <div class="card p-6 hover-scale transition-all duration-300 relative">
                     <div class="pb-0">
                         <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/abstract-geometric-shapes-sUE5R8SURiS0JAVLKZSgt58oSNZSJI.png" alt="Nuvio Elite" class="w-full h-48 object-cover rounded-lg mb-4">
@@ -404,13 +511,14 @@
                             <span class="text-sm">Premium Support</span>
                         </li>
                     </ul>
-                    <button class="btn-primary w-full">Jetzt bestellen</button>
+                    <!-- Added onclick with product selection -->
+                    <button class="btn-primary w-full" onclick="openPurchaseModal('elite')">Jetzt bestellen</button>
                 </div>
             </div>
         </div>
     </section>
 
-     Lifestyle Section 
+    <!-- Lifestyle Section -->
     <section class="py-20 px-4 bg-gray-900/30">
         <div class="container mx-auto">
             <div class="text-center mb-16">
@@ -439,18 +547,19 @@
         </div>
     </section>
 
-     CTA Section 
+    <!-- CTA Section -->
     <section class="py-20 px-4 bg-blue-500/10">
         <div class="container mx-auto text-center">
             <h2 class="text-4xl font-bold mb-4">Bereit für besseren Schlaf?</h2>
             <p class="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
                 Schließen Sie sich tausenden zufriedenen Kunden an und erleben Sie die Zukunft des Schlafens mit Nuvio.
             </p>
-            <button class="btn-primary text-lg">Kollektion ansehen</button>
+            <!-- Added onclick to open purchase modal -->
+            <button class="btn-primary text-lg" onclick="openPurchaseModal()">Kollektion ansehen</button>
         </div>
     </section>
 
-     Footer 
+    <!-- Footer -->
     <footer class="bg-gray-900 border-t border-gray-800 py-12 px-4">
         <div class="container mx-auto">
             <div class="grid md:grid-cols-4 gap-8">
@@ -489,7 +598,166 @@
         </div>
     </footer>
 
+    <!-- Added purchase modal -->
+    <div id="purchaseModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePurchaseModal()">&times;</span>
+            <h2 class="text-2xl font-bold mb-6 text-center">Nuvio Smart Pillow bestellen</h2>
+            
+            <form id="purchaseForm" onsubmit="submitPurchase(event)">
+                <div class="form-group">
+                    <label class="form-label">Wählen Sie Ihr Kissen:</label>
+                    <div id="productOptions">
+                        <div class="product-option" onclick="selectProduct('essential', 50)">
+                            <div class="product-info">
+                                <h4>Nuvio Essential</h4>
+                                <p>Wärme-/Kühlfunktion, App-Steuerung</p>
+                            </div>
+                            <div class="product-price">€50</div>
+                        </div>
+                        <div class="product-option" onclick="selectProduct('pro', 499)">
+                            <div class="product-info">
+                                <h4>Nuvio Pro</h4>
+                                <p>Alle Essential Features + Temperaturregelung + Klänge + Massage</p>
+                            </div>
+                            <div class="product-price">€499</div>
+                        </div>
+                        <div class="product-option" onclick="selectProduct('elite', 699)">
+                            <div class="product-info">
+                                <h4>Nuvio Elite</h4>
+                                <p>Alle Pro Features + Gesundheitsmonitoring + KI-Optimierung</p>
+                            </div>
+                            <div class="product-price">€699</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="quantity" class="form-label">Anzahl:</label>
+                    <select id="quantity" class="form-select" onchange="updateTotal()">
+                        <option value="1">1 Kissen</option>
+                        <option value="2">2 Kissen</option>
+                        <option value="3">3 Kissen</option>
+                        <option value="4">4 Kissen</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="name" class="form-label">Vollständiger Name:</label>
+                    <input type="text" id="name" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">E-Mail-Adresse:</label>
+                    <input type="email" id="email" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="address" class="form-label">Lieferadresse:</label>
+                    <input type="text" id="address" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="city" class="form-label">Stadt:</label>
+                    <input type="text" id="city" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="postal" class="form-label">Postleitzahl:</label>
+                    <input type="text" id="postal" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <div class="flex justify-between items-center p-4 bg-gray-800 rounded-lg">
+                        <span class="text-lg font-semibold">Gesamtpreis:</span>
+                        <span id="totalPrice" class="text-2xl font-bold text-blue-400">€0</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary w-full text-lg">Bestellung abschicken</button>
+            </form>
+        </div>
+    </div>
+
     <script>
+        let selectedProduct = null;
+        let selectedPrice = 0;
+
+        function openPurchaseModal(productType = null) {
+            const modal = document.getElementById('purchaseModal');
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+            
+            if (productType) {
+                selectProduct(productType, getProductPrice(productType));
+            }
+        }
+
+        function closePurchaseModal() {
+            const modal = document.getElementById('purchaseModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        function getProductPrice(productType) {
+            const prices = { essential: 50, pro: 499, elite: 699 };
+            return prices[productType] || 0;
+        }
+
+        function selectProduct(productType, price) {
+            // Remove previous selection
+            document.querySelectorAll('.product-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selection to clicked option
+            event.currentTarget.classList.add('selected');
+            
+            selectedProduct = productType;
+            selectedPrice = price;
+            updateTotal();
+        }
+
+        function updateTotal() {
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const total = selectedPrice * quantity;
+            document.getElementById('totalPrice').textContent = `€${total}`;
+        }
+
+        function submitPurchase(event) {
+            event.preventDefault();
+            
+            if (!selectedProduct) {
+                alert('Bitte wählen Sie ein Kissen aus.');
+                return;
+            }
+            
+            const formData = {
+                product: selectedProduct,
+                quantity: document.getElementById('quantity').value,
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                postal: document.getElementById('postal').value,
+                total: document.getElementById('totalPrice').textContent
+            };
+            
+            alert(`Vielen Dank für Ihre Bestellung!\n\nProdukt: Nuvio ${selectedProduct.charAt(0).toUpperCase() + selectedProduct.slice(1)}\nMenge: ${formData.quantity}\nGesamtpreis: ${formData.total}\n\nWir werden uns in Kürze bei Ihnen melden.`);
+            closePurchaseModal();
+            document.getElementById('purchaseForm').reset();
+            selectedProduct = null;
+            selectedPrice = 0;
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('purchaseModal');
+            if (event.target === modal) {
+                closePurchaseModal();
+            }
+        }
+
         // Fade in animation on scroll
         document.addEventListener('DOMContentLoaded', function() {
             const hero = document.getElementById('hero');
