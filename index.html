@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuvio - Smart Pillows für besseren Schlaf</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#0a0a0a',
+                        foreground: '#fafafa',
+                        card: '#1a1a1a',
+                        'card-foreground': '#fafafa',
+                        primary: '#3b82f6',
+                        'primary-foreground': '#f0f9ff',
+                        secondary: '#262626',
+                        'secondary-foreground': '#fafafa',
+                        muted: '#262626',
+                        'muted-foreground': '#a1a1aa',
+                        accent: '#262626',
+                        'accent-foreground': '#fafafa',
+                        destructive: '#dc2626',
+                        'destructive-foreground': '#fafafa',
+                        border: '#262626',
+                        input: '#262626',
+                        ring: '#3b82f6',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #fafafa;
+        }
+        .btn-primary {
+            background-color: #3b82f6;
+            color: #f0f9ff;
+            padding: 12px 32px;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+        .btn-outline {
+            background-color: transparent;
+            color: #fafafa;
+            padding: 12px 32px;
+            border: 1px solid #262626;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .btn-outline:hover {
+            background-color: #1a1a1a;
+        }
+        .card {
+            background-color: #1a1a1a;
+            border: 1px solid #262626;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .card:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+        .badge {
+            background-color: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .popular-badge {
+            background-color: #3b82f6;
+            color: #f0f9ff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .ring-primary {
+            box-shadow: 0 0 0 2px #3b82f6;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #1a1a1a;
+            border: 1px solid #262626;
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .close {
+            position: absolute;
+            right: 16px;
+            top: 16px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #a1a1aa;
+            transition: color 0.2s;
+        }
+        .close:hover {
+            color: #fafafa;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #fafafa;
+        }
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: #262626;
+            border: 1px solid #404040;
+            border-radius: 6px;
+            color: #fafafa;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+        .product-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background-color: #262626;
+            border: 2px solid #404040;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .product-option:hover {
+            border-color: #3b82f6;
+        }
+        .product-option.selected {
+            border-color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+        .product-info h4 {
+            margin: 0 0 4px 0;
+            font-weight: 600;
+        }
+        .product-info p {
+            margin: 0;
+            font-size: 14px;
+            color: #a1a1aa;
+        }
+        .product-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #3b82f6;
+        }
+        .round-logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="round-logo">N</div>
+                <div>
+                    <div class="text-xl font-bold text-white">Nuvio</div>
+                    <div class="text-xs text-gray-400">for better sleep</div>
+                </div>
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#features" class="text-gray-400 hover:text-blue-400 transition-colors">Features</a>
+                <a href="#products" class="text-gray-400 hover:text-blue-400 transition-colors">Produkte</a>
+                <a href="#contact" class="text-gray-400 hover:text-blue-400 transition-colors">Kontakt</a>
+            </nav>
+            <button class="btn-primary" onclick="openPurchaseModal()">Jetzt kaufen</button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative py-20 px-4 overflow-hidden bg-black">
+        <div class="container mx-auto text-center">
+            <div class="badge mb-6">Neue Smart Pillow Technologie</div>
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 text-white">
+                Smart Pillows für
+                <span class="text-blue-400 block">besseren Schlaf</span>
+            </h1>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                Intelligente Kissen mit App-Steuerung für optimalen Komfort.
+            </p>
+            <div class="mb-8">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/modern-smart-pillow-on-elegant-bed-in-dark-bedroom-YCCej6lIIUGusMsHhxLG0qk2thJRVH.png" alt="Nuvio Smart Pillow" class="mx-auto rounded-lg shadow-2xl max-w-full h-auto">
+            </div>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="btn-primary text-lg" onclick="openPurchaseModal()">Jetzt bestellen</button>
+                <button class="btn-outline text-lg" onclick="scrollToSection('features')">Mehr erfahren</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 px-4 bg-gray-900">
+        <div class="container mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4 text-white">Einfache Features</h2>
+                <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                    Grundlegende Funktionen für besseren Schlaf.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card p-6 transition-all duration-300">
+                    <div class="mb-4 text-blue-400">
+                        <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-white">Temperatur</h3>
+                    <p class="text-gray-300">Wärme und Kühlung</p>
+                </div>
+
+                <div class="card p-6 transition-all duration-300">
+                    <div class="mb-4 text-blue-400">
+                        <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                            <line x1="8" y1="21" x2="16" y2="21"></line>
+                            <line x1="12" y1="17" x2="12" y2="21"></line>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-white">App Control</h3>
+                    <p class="text-gray-300">Smartphone Steuerung</p>
+                </div>
+
+                <div class="card p-6 transition-all duration-300">
+                    <div class="mb-4 text-blue-400">
+                        <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <polygon points="11 5,6 9,2 9,2 15,6 15,11 19,11,11 5"></polygon>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-white">Sounds</h3>
+                    <p class="text-gray-300">Entspannende Musik</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-20 px-4 bg-black">
+        <div class="container mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4 text-white">Unsere Kissen</h2>
+                <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                    Drei einfache Modelle zur Auswahl.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Nuvio Essential -->
+                <div class="card p-6 transition-all duration-300 relative">
+                    <div class="pb-0">
+                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/abstract-geometric-shapes-sUE5R8SURiS0JAVLKZSgt58oSNZSJI.png" alt="Nuvio Essential" class="w-full h-48 object-cover rounded-lg mb-4">
+                    </div>
+                    <div class="text-center mb-4">
+                        <h3 class="text-2xl font-semibold text-white">Nuvio Essential</h3>
+                        <div class="text-3xl font-bold text-blue-400">0 CHF</div>
+                    </div>
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center space-x-2">
+                            <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-sm text-gray-300">Temperatur Control</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-sm text-gray-300">App Steuerung</span>
+                        </li>
+                    </ul>
+                    <button class="btn-primary w-full" onclick="openPurchaseModal('essential')">Bestellen</button>
+                </div>
+
+                <!-- Nuvio Pro -->
+                <div class="card p-6 transition-all duration-300 relative ring-primary">
+                    <div class="popular-badge">Beliebt</div>
+                    <div class="pb-0">
+                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/abstract-geometric-shapes-sUE5R8SURiS0JAVLKZSgt58oSNZSJI.png" alt="Nuvio Pro" class="w-full h-48 object-cover rounded-lg mb-4">
+                    </div>
+                    <div class="text-center mb-4">
+                        <h3 class="text-2xl font-semibold text-white">Nuvio Pro</h3>
+                        <div class="text-3xl font-bold text-blue-400">0 CHF</div>
+                    </div>
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center space-x-2">
+                            <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-sm text-gray-300">Alle Essential Features</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-sm text-gray-300">Musik & Sounds</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-sm text-gray-300">Massage</span>
+                        </li>
+                    </ul>
+                    <button class="btn-primary w-full" onclick="openPurchaseModal('pro')">Bestellen</button>
+                </div>
+
+                <!-- Nuvio Elite -->
+                <div class="card p-6 transition-all duration-300 relative">
+                    <div class="pb-0">
+                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/abstract-geometric-shapes-sUE5R8SURiS0JAVLKZSgt58oSNZSJI.png" alt="Nuvio Elite" class="w-full h-48 object-cover rounded-lg mb-4">
+                    </div>
+                    <div class="text-center mb-4">
+                        <h3 class="text-2xl font-semibold text-white">Nuvio Elite</h3>
+                        <div class="text-3xl font-bold text-blue-400">0 CHF</div>
+                    </div>
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center space-x-2">
+                            <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-sm text-gray-300">Alle Pro Features</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-sm text-gray-300">Sleep Tracking</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-sm text-gray-300">Premium Support</span>
+                        </li>
+                    </ul>
+                    <button class="btn-primary w-full" onclick="openPurchaseModal('elite')">Bestellen</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 px-4 bg-gray-800">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-4 text-white">Bereit für besseren Schlaf?</h2>
+            <p class="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
+                Probieren Sie unsere Smart Pillows kostenlos aus.
+            </p>
+            <button class="btn-primary text-lg" onclick="openPurchaseModal()">Kostenlos bestellen</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-800 py-12 px-4">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="round-logo">N</div>
+                        <div>
+                            <div class="text-xl font-bold text-white">Nuvio</div>
+                            <div class="text-xs text-gray-400">for better sleep</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm">Smart Pillows für besseren Schlaf.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-4 text-white">Produkte</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-blue-400 transition-colors" onclick="openPurchaseModal('essential')">Nuvio Essential</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors" onclick="openPurchaseModal('pro')">Nuvio Pro</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors" onclick="openPurchaseModal('elite')">Nuvio Elite</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-4 text-white">Kontakt</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-blue-400 transition-colors" onclick="showContact()">E-Mail</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors" onclick="showContact()">Telefon</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors" onclick="showContact()">Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+                <p>&copy; 2024 Nuvio. Alle Rechte vorbehalten.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Purchase Modal -->
+    <div id="purchaseModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePurchaseModal()">&times;</span>
+            <h2 class="text-2xl font-bold mb-6 text-center text-white">Nuvio Smart Pillow bestellen</h2>
+            
+            <form id="purchaseForm" onsubmit="submitPurchase(event)">
+                <div class="form-group">
+                    <label class="form-label">Wählen Sie Ihr Kissen:</label>
+                    <div id="productOptions">
+                        <div class="product-option" onclick="selectProduct('essential', 0)">
+                            <div class="product-info">
+                                <h4 class="text-white">Nuvio Essential</h4>
+                                <p>Temperatur Control + App</p>
+                            </div>
+                            <div class="product-price">0 CHF</div>
+                        </div>
+                        <div class="product-option" onclick="selectProduct('pro', 0)">
+                            <div class="product-info">
+                                <h4 class="text-white">Nuvio Pro</h4>
+                                <p>Essential + Musik + Massage</p>
+                            </div>
+                            <div class="product-price">0 CHF</div>
+                        </div>
+                        <div class="product-option" onclick="selectProduct('elite', 0)">
+                            <div class="product-info">
+                                <h4 class="text-white">Nuvio Elite</h4>
+                                <p>Pro + Sleep Tracking + Premium Support</p>
+                            </div>
+                            <div class="product-price">0 CHF</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="quantity" class="form-label">Anzahl:</label>
+                    <select id="quantity" class="form-select" onchange="updateTotal()">
+                        <option value="1">1 Kissen</option>
+                        <option value="2">2 Kissen</option>
+                        <option value="3">3 Kissen</option>
+                        <option value="4">4 Kissen</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="name" class="form-label">Name:</label>
+                    <input type="text" id="name" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">E-Mail:</label>
+                    <input type="email" id="email" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="address" class="form-label">Adresse:</label>
+                    <input type="text" id="address" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <div class="flex justify-between items-center p-4 bg-gray-800 rounded-lg">
+                        <span class="text-lg font-semibold text-white">Gesamtpreis:</span>
+                        <span id="totalPrice" class="text-2xl font-bold text-blue-400">0 CHF</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary w-full text-lg">Kostenlos bestellen</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let selectedProduct = null;
+        let selectedPrice = 0;
+
+        function openPurchaseModal(productType = null) {
+            const modal = document.getElementById('purchaseModal');
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+            
+            if (productType) {
+                selectProduct(productType, 0);
+            }
+        }
+
+        function closePurchaseModal() {
+            const modal = document.getElementById('purchaseModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        function selectProduct(productType, price) {
+            document.querySelectorAll('.product-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            event.currentTarget.classList.add('selected');
+            
+            selectedProduct = productType;
+            selectedPrice = price;
+            updateTotal();
+        }
+
+        function updateTotal() {
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const total = selectedPrice * quantity;
+            document.getElementById('totalPrice').textContent = `${total} CHF`;
+        }
+
+        function submitPurchase(event) {
+            event.preventDefault();
+            
+            if (!selectedProduct) {
+                alert('Bitte wählen Sie ein Kissen aus.');
+                return;
+            }
+            
+            const formData = {
+                product: selectedProduct,
+                quantity: document.getElementById('quantity').value,
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                address: document.getElementById('address').value,
+                total: document.getElementById('totalPrice').textContent
+            };
+            
+            alert(`Vielen Dank für Ihre Bestellung!\n\nProdukt: Nuvio ${selectedProduct.charAt(0).toUpperCase() + selectedProduct.slice(1)}\nMenge: ${formData.quantity}\nGesamtpreis: ${formData.total}\n\nWir senden Ihnen Ihr kostenloses Kissen zu!`);
+            closePurchaseModal();
+            document.getElementById('purchaseForm').reset();
+            selectedProduct = null;
+            selectedPrice = 0;
+        }
+
+        function showContact() {
+            alert('Kontakt:\nE-Mail: info@nuvio.com\nTelefon: +49 123 456 789\nSupport: support@nuvio.com');
+        }
+
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('purchaseModal');
+            if (event.target === modal) {
+                closePurchaseModal();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
